@@ -34,6 +34,12 @@ namespace link {
 		std::string int_parse(int begin);
 		std::string str_parse(int begin);
 		std::string list_parse(int begin);
+
+		// in dict, the element is either a key or a value
+		enum class ele_type_t {
+			KEY,
+			VALUE
+		};
 		std::string dict_parse(int begin);
 	};
 

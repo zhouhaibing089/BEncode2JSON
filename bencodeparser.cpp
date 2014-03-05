@@ -1,6 +1,5 @@
 #include "include/bencodeparser.h"
 #include <cstring>
-#include <map>
 
 namespace link {
 
@@ -70,14 +69,48 @@ namespace link {
 			action_t act = get_action(src[i]);
 			// so we get an element of a list
 			std::string tmp = (this->*act)(i);
-			s += ("\"" + tmp + "\"" + ",");
+			if(tmp[0] == '{' || tmp[0] == '[') {
+				s += (tmp + ",");
+			} else {
+				s += ("\"" + tmp + "\"" + ",");
+			}
 			i = pos;
 		}
 		throw syntax_error{};
 	}
 
 	std::string bencode2json_parser::dict_parse(int begin) {
-		return "1";
+		std::string s = "{";
+		ele_type_t type = ele_type_t::KEY;			
+		for (int i = begin + 1; i < len; ++i) {
+			if (src[i] == 'e') {
+				int length = s.size();
+				if (length == 1) {
+					s += "}";
+				} else {
+					s[length - 1] = '}';
+				}
+				pos = i;
+				return s;
+			}
+			action_t act = get_action(src[i]);
+			std::string tmp = (this->*act)(i);
+			if(tmp[0] == '{' || tmp[0] == '[') {
+				s += tmp;
+			} else {
+				s += ("\"" + tmp + "\"");
+			}
+			// then colon or comma
+			if (type == ele_type_t::KEY) {
+				s += ":";
+				type == ele_type_t::VALUE;
+			} else {
+				s += ",";
+				type == ele_type_t::KEY;
+			}
+			i = pos;
+		}
+		throw syntax_error{};
 	}
 
 	bencode2json_parser::action_t bencode2json_parser::get_action(char c) const {
