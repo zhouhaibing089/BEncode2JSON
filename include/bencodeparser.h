@@ -2,20 +2,11 @@
 #define BENCODE_PARSER
 
 #include <string>
-#include <stack>
+#include <map>
 
 namespace link {
 
 	struct syntax_error;
-
-	enum class parse_status {
-		INIT,		// initialization status
-		LIST,		// meet list => l
-		DICT,		// meet dict => d
-		STR,		// meet str => number
-		INT,		// meet integer => i
-		CONT 		// continue seeking words
-	};
 
 	class bencode2json_parser {
 	public:
@@ -28,12 +19,22 @@ namespace link {
 		~bencode2json_parser();
 
 	private:
-		// the status stack
-		std::stack<parse_status> status_stk;
 		// source string with bencode format
 		char *src = nullptr;
 		// length of source
-		int srclen;
+		int len;
+		// parse position
+		int pos = 0;
+
+	private:
+		
+		typedef std::string (bencode2json_parser::*action)(int, int);
+		action action_map(char c) const;
+
+		std::string int_parse(int begin, int end);
+		std::string str_parse(int begin, int end);
+		std::string list_parse(int begin, int end);
+		std::string dict_parse(int begin, int end);
 	};
 
 }
