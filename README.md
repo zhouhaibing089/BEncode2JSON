@@ -6,25 +6,29 @@ This library is going to serve as a ultility for the project [Link](https://gith
 
 Here is the code in the file `test.cpp`
 
-	#include <iostream>
-	#include <string>
-	#include "include/bencode2json.h"
+```cpp
+#include <iostream>
+#include <string>
+#include "include/bencode2json.h"
 
-	int main() {
-		std::string s = "d4:spaml1:a1:bee";
-		std::cout << link::bencode2json(s) << std::endl;
-		return 0;
-	}
+int main() {
+	std::string s = "d4:spaml1:a1:bee";
+	std::cout << link::bencode2json(s) << std::endl;
+	return 0;
+}
+```
 
 Just as you see, the interface is very simple. When you open the included file `include/bencode2json.h`, you see the interface there:
 
-	namespace link {
-		// exception
-		struct syntax_error;
+```cpp
+namespace link {
+	// exception
+	struct syntax_error;
 
-		// convert functions
-		std::string bencode2json(std::string bencodestr);
-		std::string bencode2json(const char *bencodestr, int length);
-	}
+	// convert functions
+	std::string bencode2json(std::string bencodestr);
+	std::string bencode2json(const char *bencodestr, int length);
+}
+```
 
 So you see, a really simple interface and a really simple project.
