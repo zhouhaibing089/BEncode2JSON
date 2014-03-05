@@ -28,13 +28,13 @@ namespace link {
 
 	private:
 		
-		typedef std::string (bencode2json_parser::*action)(int, int);
-		action action_map(char c) const;
+		typedef std::string (bencode2json_parser::*action_t)(int);
+		action_t get_action(char c) const;
 
-		std::string int_parse(int begin, int end);
-		std::string str_parse(int begin, int end);
-		std::string list_parse(int begin, int end);
-		std::string dict_parse(int begin, int end);
+		std::string int_parse(int begin);
+		std::string str_parse(int begin);
+		std::string list_parse(int begin);
+		std::string dict_parse(int begin);
 	};
 
 }

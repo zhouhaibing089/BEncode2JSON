@@ -17,14 +17,26 @@ namespace link {
 		return result;
 	}
 
-	// helper method
-	std::string bencode2json_parser::int_parse(int begin, int end) {
-		return "1";
+	std::string bencode2json_parser::int_parse(int begin) {
+		for(int i = begin + 1; i < len; ++i) {
+			if (src[i] == 'e') {
+				// str[begin] = 'i', so i - begin bytes is enough
+				int size = i - begin;
+				char *res = new char[size];
+				memcpy(res, src + begin + 1, size - 1);
+				res[size] = 0;
+				std::string s {res};
+				delete [] res;
+				pos = i;
+				return s;
+			}
+		}
+		throw syntax_error{};
 	}
 
 
-	std::string bencode2json_parser::str_parse(int begin, int end) {
-		for (int i = begin; i < end; ++i) {
+	std::string bencode2json_parser::str_parse(int begin) {
+		for (int i = begin; i < len; ++i) {
 			if (src[i] == ':') {
 				int cnt = str2int(src + begin, i - begin);
 				// TODO: some out of bounds exception check may be needed
@@ -33,30 +45,42 @@ namespace link {
 				res[cnt] = 0;
 				std::string s {res};
 				delete [] res;
-				pos = i + cnt + 1;
+				pos = i + cnt;
 				return s;
 			}
 		}
 		throw syntax_error{};
-		
 	}
 
-	std::string bencode2json_parser::list_parse(int begin, int end) {
+	std::string bencode2json_parser::list_parse(int begin) {
 		std::string s = "[";
-		for(int i = begin + 1; i < end; ++i) {
-			// invoke the next action method
+		for(int i = begin + 1; i < len; ++i) {
+			// The final end marker
 			if (src[i] == 'e') {
-
+				int length = s.size();
+				// if we get an empty list
+				if (length == 1) {
+					s += "]";
+				} else {
+					s[length - 1] = ']';
+				}
+				pos = i;
+				return s;
 			}
+			action_t act = get_action(src[i]);
+			// so we get an element of a list
+			std::string tmp = (this->*act)(i);
+			s += ("\"" + tmp + "\"" + ",");
+			i = pos;
 		}
+		throw syntax_error{};
+	}
+
+	std::string bencode2json_parser::dict_parse(int begin) {
 		return "1";
 	}
 
-	std::string bencode2json_parser::dict_parse(int begin, int end) {
-		return "1";
-	}
-
-	bencode2json_parser::action bencode2json_parser::action_map(char c) const {
+	bencode2json_parser::action_t bencode2json_parser::get_action(char c) const {
 		switch(c) {
 		case 'i':
 			return &bencode2json_parser::int_parse;
@@ -92,7 +116,7 @@ namespace link {
 
 	std::string bencode2json_parser::parse() {
 		int pos = 0;
-		action act = action_map(src[0]);
-		return (this->*act)(0, len);
+		action_t act = get_action(src[0]);
+		return (this->*act)(0);
 	}
 }
