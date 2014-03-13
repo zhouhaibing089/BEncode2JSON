@@ -12,3 +12,4 @@ test: test.cpp bencode2json.o bencodeparser.o
 
 clean:
 	rm -f build/*
+

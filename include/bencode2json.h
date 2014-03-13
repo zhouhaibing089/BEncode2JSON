@@ -11,12 +11,12 @@
 
 namespace link {
 
-	// when we meet a syntax error
-	struct syntax_error;
+    // when we meet a syntax error
+    struct syntax_error;
 
-	// These two methods may throw syntax_error exception
-	std::string bencode2json(std::string bencodestr);
-	std::string bencode2json(const char *bencodestr, int length);
+    // These two methods may throw syntax_error exception
+    std::string bencode2json(std::string bencodestr);
+    std::string bencode2json(const char *bencodestr, int length);
 
 }
 
