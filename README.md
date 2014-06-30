@@ -35,7 +35,7 @@ Just as you see, the interface is very simple. When you open the included file `
 ```cpp
 namespace link {
 	// exception
-	struct syntax_error;
+	struct syntax_error {};
 
 	// convert functions
 	std::string bencode2json(std::string bencodestr);
