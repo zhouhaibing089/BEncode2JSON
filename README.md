@@ -2,6 +2,12 @@
 
 This library is going to serve as a ultility for the project [Link](https://github.com/zhouhaibing089/link)
 
+###How to build
+
+```bash
+make libb2j.a
+```
+
 ###How to use
 
 Here is the code in the file `test.cpp`
@@ -12,10 +18,16 @@ Here is the code in the file `test.cpp`
 #include "include/bencode2json.h"
 
 int main() {
-	std::string s = "d4:spaml1:a1:bee";
-	std::cout << link::bencode2json(s) << std::endl;
-	return 0;
+    std::string s;
+    std::cin >> s;
+    try {
+    	std::cout << link::bencode2json(s) << std::endl;
+	} catch (link::syntax_error e) {
+		std::cout << "Syntax Error" << std::endl;
+	}
+    return 0;
 }
+
 ```
 
 Just as you see, the interface is very simple. When you open the included file `include/bencode2json.h`, you see the interface there:
