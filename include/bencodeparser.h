@@ -6,8 +6,6 @@
 
 namespace link {
 
-    struct syntax_error;
-
     class bencode2json_parser {
     public:
         // copy the str to another place

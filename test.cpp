@@ -3,8 +3,13 @@
 #include "include/bencode2json.h"
 
 int main() {
-    std::string s = "d4:spaml1:a1:bee";
+    std::string s;
+    std::cin >> s;
     // Here I will expect it to output {"spam": "eggs"}
-    std::cout << link::bencode2json(s) << std::endl;
+    try {
+    	std::cout << link::bencode2json(s) << std::endl;
+	} catch (link::syntax_error e) {
+		std::cout << "Syntax Error" << std::endl;
+	}
     return 0;
 }

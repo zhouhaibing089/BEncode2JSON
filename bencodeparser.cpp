@@ -1,9 +1,8 @@
 #include "include/bencodeparser.h"
+#include "include/bencode2json.h"
 #include <cstring>
 
 namespace link {
-
-    struct syntax_error {};
 
     // convert a c string to int
     int str2int(const char *cstr, int lenth) {
@@ -103,10 +102,10 @@ namespace link {
             // then colon or comma
             if (type == ele_type_t::KEY) {
                 s += ":";
-                type == ele_type_t::VALUE;
+                type = ele_type_t::VALUE;
             } else {
                 s += ",";
-                type == ele_type_t::KEY;
+                type = ele_type_t::KEY;
             }
             i = pos;
         }

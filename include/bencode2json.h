@@ -8,11 +8,15 @@
 #ifndef BENCODE_TO_JSON
 #define BENCODE_TO_JSON
 #include <string>
+// for usage of bencode2json_parser and syntax_error
+#include "bencodeparser.h"	
 
 namespace link {
 
-    // when we meet a syntax error
-    struct syntax_error;
+	// definition goes in header
+    struct syntax_error {
+
+    };
 
     // These two methods may throw syntax_error exception
     std::string bencode2json(std::string bencodestr);
